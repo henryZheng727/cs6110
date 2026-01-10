@@ -13,7 +13,7 @@ Write predicates and generators to test a card game using the Hypothesis library
   - Implement 5 generators (Hypothesis calls these "strategies"): `num_players_strat`, `old_hand_strat`, `num_to_draw_strat`, `player_strat`, and `opponent_strat`.
   - Write at least 3 tests, one for each of your predicates. These tests should not use PBT / Hypothesis.
 - Do not edit `card_game_utils.py` or `correct_card_game.py`.
-  - We recommend that you edit `card_game_utils.py`.
+  - We recommend that you read `card_game_utils.py`.
   - Ignore `correct_card_game.py` file. You can read it if you want, but the goal is to test it against the informal specification (below), not to understand how this code works.
 - Check that all tests pass using `python -m pytest test_card_game.py` (or a similar command)
 - Submit your modified test_card_game.py with all tests passing.
