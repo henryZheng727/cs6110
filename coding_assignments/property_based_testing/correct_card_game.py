@@ -19,7 +19,7 @@ def draw(h:Hand, num_to_draw:int) -> Hand:
     random.shuffle(dd)
     return dd[:num_to_draw] + h[num_to_draw:]
 
-def play_hand(player:Hand, opponent:Hand) -> bool:
+def play_hand(player:Hand, opponent:Hand) -> GameResult:
     # did player beat opponent? (intentionally ugly)
     pc = rank_counts(player)
     oc = rank_counts(opponent)
