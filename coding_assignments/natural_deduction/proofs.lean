@@ -4,8 +4,11 @@ theorem one :
       exact fun (p : P) => pq.right
 
 theorem two:
-    ¬(P ∧ Q) → R → ¬ R → Q := by
-      sorry
+    ¬(P ∧ Q) → R → ¬R → Q := by
+      intro not_p_and_q
+      intro r
+      intro not_r
+      contradiction
 
 theorem three:
     (P → Q) ∨ P ∧ ¬Q := by
