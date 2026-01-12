@@ -51,7 +51,6 @@ theorem example :
     exact pandp.left
 ```
 
- 
 = Extra Links
 https://adam.math.hhu.de/#/g/trequetrum/lean4game-logic (great reference material for Lean tactics, even if the game doesn't load!)
 
