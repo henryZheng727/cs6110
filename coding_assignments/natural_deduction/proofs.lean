@@ -12,8 +12,12 @@ theorem three:
       sorry
 
 theorem four:
-    ((P → Q) ∧ (P → R)) -> (P → Q ∧ R) := by
-      sorry
+    ((P → Q) ∧ (P → R)) → (P → Q ∧ R) := by
+      intro ptoq_and_ptor
+      intro p
+      constructor
+      exact ptoq_and_ptor.left p
+      exact ptoq_and_ptor.right p
 
 theorem five:
     P → ¬¬P := by
