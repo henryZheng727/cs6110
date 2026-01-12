@@ -28,13 +28,13 @@ theorem five:
       intro notp
       contradiction
 
-theorem six:
-    ¬¬(P ∧ ¬P) := by
+theorem seven:
+    P ∨ ¬P := by
       sorry
 
-theorem seven:
-    P ∧ ¬P := by
-      sorry
+theorem six:
+    ¬¬(P ∨ ¬P) := by
+      apply five seven
 
 theorem eight {P Q : Prop}:
     ((P → Q) → P) → P := by
