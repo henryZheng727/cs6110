@@ -24,7 +24,9 @@ theorem four:
 
 theorem five:
     P → ¬¬P := by
-      sorry
+      intro p
+      intro notp
+      contradiction
 
 theorem six:
     ¬¬(P ∧ ¬P) := by
