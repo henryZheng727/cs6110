@@ -40,14 +40,14 @@ theorem eight {P Q : Prop}:
     ((P → Q) → P) → P := by
       sorry
 
-theorem nine {A: U → Prop}:
+theorem nine {A: Prop → Prop}:
     (∀x, A x) → (∃y, A y) := by
       sorry
 
-theorem ten {A B: U → Prop}:
+theorem ten {A B: Prop → Prop}:
     (∀x, A x → B x) → ((∀x, A x) → (∀x, B x)) := by
       sorry
 
-theorem eleven {A B: U → Prop}:
+theorem eleven {A B: Prop → Prop}:
     ((∃x, A x) ∨ (∃x, B x)) → ∃x, (A x ∨ B x) := by
       sorry
