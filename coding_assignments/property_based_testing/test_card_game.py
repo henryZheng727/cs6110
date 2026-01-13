@@ -1,35 +1,52 @@
 from hypothesis import given, settings, strategies as st
-from typing import Dict, List
-from card_game_utils import *
+from card_game_utils import Hand, HAND_SIZE, GameResult
 from correct_card_game import deal, draw, play_hand
 
 MAX_EXAMPLES = 1_000 # lower number => faster, but less coverage
 settings.register_profile("my_profile", settings(max_examples=MAX_EXAMPLES, deadline=None))
 settings.load_profile("my_profile")
 
-
-def is_valid_deal(num_players: int, dealt_hands: List[Hand]) -> bool:
+def is_valid_hand(h: Hand) -> bool:
     '''
-    Check that dealt_hands is a valid deal for num_players
-
-    Every player needs HAND_SIZE cards. All cards must be unique, no duplicates.
-    It is illegal to call deal with no players or with more than MAX_PLAYERS players.
+    (HELPER FUNCTION) Check that h is a valid hand: has `HAND_SIZE` cards, all unique.
     '''
-    raise NotImplementedError
+    if len(h) != HAND_SIZE:
+        return False
+    return len(set(h)) == HAND_SIZE
+
+def is_valid_deal(num_players: int, dealt_hands: list[Hand]) -> bool:
+    '''
+    Check that `dealt_hands` is a valid deal for `num_players`.
+
+    Every player needs `HAND_SIZE` cards. All cards must be unique, no duplicates.
+    It is illegal to call deal with no players or with more than `MAX_PLAYERS` players.
+    '''
+    if len(dealt_hands) != num_players:
+        return False
+    if any(not is_valid_hand(h) for h in dealt_hands):
+        return False
+
+    all_cards = [c for h in dealt_hands for c in h]
+    return len(all_cards) == num_players * HAND_SIZE and len(set(all_cards)) == len(all_cards)
 
 def is_valid_draw(old_hand: Hand, num_to_draw: int, new_hand: Hand) -> bool:
     '''
-    Check that new_hand is a valid result for draw(old_hand, num_to_draw)
+    Check that new_hand is a valid result for `draw(old_hand, num_to_draw)`
 
-    The new hand should have num_to_draw cards replaced with different cards.
+    The new hand should have `num_to_draw` cards replaced with different cards.
     It is illegal to call draw on an invalid hand or with a negative
-     num_to_draw or with a num_to_draw that is greater than the number of cards.
+    `num_to_draw` or with a `num_to_draw` that is greater than the number of cards.
     '''
-    raise NotImplementedError
+    old_set = set(old_hand)
+    new_set = set(new_hand)
+    kept = old_set.intersection(new_set)
+    added = new_set - old_set
+
+    return len(kept) == HAND_SIZE - num_to_draw and len(added) == num_to_draw
 
 def is_valid_play_hand(player: Hand, opponent: Hand, result: GameResult) -> bool:
     '''
-    Check that result is a valid outcome of play_hand(player, opponent)
+    Check that result is a valid outcome of `play_hand(player, opponent)`
     from the perspective of the player.
     '''
     raise NotImplementedError
