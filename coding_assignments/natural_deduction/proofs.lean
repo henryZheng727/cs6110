@@ -30,7 +30,8 @@ theorem five:
 
 theorem seven:
     P ∨ ¬P := by
-      sorry
+    classical
+    exact Classical.em P
 
 theorem six:
     ¬¬(P ∨ ¬P) := by
@@ -50,11 +51,4 @@ theorem ten {A B: Prop → Prop}:
 
 theorem eleven {A B: Prop → Prop}:
     ((∃x, A x) ∨ (∃x, B x)) → ∃x, (A x ∨ B x) := by
-      intro assumption
-      cases assumption with
-      | inl left =>
-          cases left with
-          | intro x ax => exact ⟨x, Or.inl ax⟩
-      | inr right =>
-          cases right with
-          | intro x bx => exact ⟨x, Or.inr bx⟩
+      sorry
