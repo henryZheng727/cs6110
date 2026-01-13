@@ -1,5 +1,5 @@
 from hypothesis import given, settings, strategies as st
-from card_game_utils import Hand, HAND_SIZE, GameResult
+from card_game_utils import MAX_PLAYERS, Hand, HAND_SIZE, GameResult, Card, Rank, Suit
 from correct_card_game import deal, draw, play_hand
 
 MAX_EXAMPLES = 1_000 # lower number => faster, but less coverage
@@ -52,7 +52,7 @@ def is_valid_play_hand(player: Hand, opponent: Hand, result: GameResult) -> bool
     raise NotImplementedError
 
 def num_players_strat():
-    raise NotImplementedError
+    return st.integers(min_value=1, max_value=MAX_PLAYERS)
 
 @given(num_players=num_players_strat())
 def test_deal(num_players: int):
@@ -63,7 +63,7 @@ def old_hand_strat():
     raise NotImplementedError
 
 def num_to_draw_strat():
-    raise NotImplementedError
+    return st.integers(min_value=0, max_value=HAND_SIZE)
 
 @given(old_hand=old_hand_strat(), num_to_draw=num_to_draw_strat())
 def test_draw(old_hand: Hand, num_to_draw: int):
