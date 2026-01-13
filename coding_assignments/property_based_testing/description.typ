@@ -16,7 +16,7 @@ Write predicates and generators to test a card game using the Hypothesis library
   - We recommend that you read `card_game_utils.py`.
   - Ignore `correct_card_game.py` file. You can read it if you want, but the goal is to test it against the informal specification (below), not to understand how this code works.
 - Check that all tests pass using `python -m pytest test_card_game.py` (or a similar command)
-- Submit your modified test_card_game.py with all tests passing.
+- Submit your modified `test_card_game.py` with all tests passing.
   - If you collaborated with other students and/or with LLMs such as ChatGPT, write comments to explain where and how.
 
 = Background
