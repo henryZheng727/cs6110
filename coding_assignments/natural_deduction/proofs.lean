@@ -43,7 +43,9 @@ theorem eight {P Q : Prop}:
 
 theorem nine {A: Prop → Prop}:
     (∀x, A x) → (∃y, A y) := by
-      sorry
+      intro ax
+      specialize ax True
+      exact ⟨True, ax⟩
 
 theorem ten {A B: Prop → Prop}:
     (∀x, A x → B x) → ((∀x, A x) → (∀x, B x)) := by
