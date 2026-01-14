@@ -47,7 +47,12 @@ theorem nine {A: Prop → Prop}:
 
 theorem ten {A B: Prop → Prop}:
     (∀x, A x → B x) → ((∀x, A x) → (∀x, B x)) := by
-      sorry
+      intro ax_to_bx
+      intro ax
+      intro x
+      specialize ax x
+      specialize ax_to_bx x
+      exact ax_to_bx ax
 
 theorem eleven {A B: Prop → Prop}:
     ((∃x, A x) ∨ (∃x, B x)) → ∃x, (A x ∨ B x) := by
