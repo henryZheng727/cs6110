@@ -1,3 +1,12 @@
+theorem contrapositive:
+    (P → Q) → (¬Q → ¬P) := by
+      intro ptoq
+      intro notq
+      false_or_by_contra
+      rename_i p
+      have q := ptoq p
+      contradiction
+
 theorem one :
     (P ∧ Q) → P → Q := by
       intro pq
@@ -37,9 +46,19 @@ theorem six:
     ¬¬(P ∨ ¬P) := by
       apply five seven
 
+-- this is probably overly complicated ngl but we ball
 theorem eight {P Q : Prop}:
     ((P → Q) → P) → P := by
-      sorry
+      intro assumption
+      false_or_by_contra
+      rename_i not_p
+      have assumption_contrapositive := contrapositive assumption
+      have not_ptoq := assumption_contrapositive not_p
+      cases three with
+      | inl left_true => contradiction
+      | inr right_true =>
+          have p := right_true.left
+          contradiction
 
 theorem nine {A: Prop → Prop}:
     (∀x, A x) → (∃y, A y) := by
