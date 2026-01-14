@@ -132,11 +132,64 @@ def test_play_hand(player: Hand, opponent: Hand):
 # These tests do NOT need to use hypothesis.
 
 def test_is_valid_deal_1():
-    raise NotImplementedError
+    hand1 = [
+        Card(Rank.TWO, Suit.SPADES),
+        Card(Rank.THREE, Suit.SPADES),
+        Card(Rank.FOUR, Suit.SPADES),
+        Card(Rank.FIVE, Suit.SPADES),
+        Card(Rank.SIX, Suit.SPADES),
+    ]
+    hand2 = [
+        Card(Rank.TWO, Suit.HEARTS),
+        Card(Rank.THREE, Suit.HEARTS),
+        Card(Rank.FOUR, Suit.HEARTS),
+        Card(Rank.FIVE, Suit.HEARTS),
+        Card(Rank.SIX, Suit.HEARTS),
+    ]
+    assert is_valid_deal(2, [hand1, hand2]) is True # valid deal, expect True
+
+    hand2_bad = hand2[:-1] + [Card(Rank.SIX, Suit.SPADES)]  # duplicate card, expect False
+    assert is_valid_deal(2, [hand1, hand2_bad]) is False
+
+    assert is_valid_deal(3, [hand1, hand2]) is False  # wrong number of hands, expect False
 
 def test_is_valid_draw_1():
-    raise NotImplementedError
+    old_hand = [
+        Card(Rank.TWO, Suit.SPADES),
+        Card(Rank.THREE, Suit.SPADES),
+        Card(Rank.FOUR, Suit.SPADES),
+        Card(Rank.FIVE, Suit.SPADES),
+        Card(Rank.SIX, Suit.SPADES),
+    ]
+
+    new_hand = [
+        Card(Rank.ACE, Suit.HEARTS),
+        Card(Rank.KING, Suit.HEARTS),
+        Card(Rank.FOUR, Suit.SPADES),
+        Card(Rank.FIVE, Suit.SPADES),
+        Card(Rank.SIX, Suit.SPADES),
+    ]
+    assert is_valid_draw(old_hand, 2, new_hand) is True  # valid draw, expect True
+
+    assert is_valid_draw(old_hand, 6, new_hand) is False # illegal draw count, expect False
 
 def test_is_valid_play_hand_1():
-    raise NotImplementedError
+    player = [
+        Card(Rank.JACK, Suit.SPADES),
+        Card(Rank.JACK, Suit.HEARTS),
+        Card(Rank.TWO, Suit.SPADES),
+        Card(Rank.THREE, Suit.SPADES),
+        Card(Rank.FOUR, Suit.SPADES),
+    ]
+
+    opponent = [
+        Card(Rank.ACE, Suit.DIAMONDS),
+        Card(Rank.ACE, Suit.CLUBS),
+        Card(Rank.TWO, Suit.DIAMONDS),
+        Card(Rank.THREE, Suit.DIAMONDS),
+        Card(Rank.FOUR, Suit.DIAMONDS),
+    ]
+
+    assert is_valid_play_hand(player, opponent, GameResult.WIN) is True
+    assert is_valid_play_hand(player, opponent, GameResult.LOSS) is False
 
