@@ -77,9 +77,9 @@ def is_valid_play_hand(player: Hand, opponent: Hand, result: GameResult) -> bool
     return result == expected
 
 def card_strat(suits: list[Suit] | None = None):
-    """
+    '''
     (HELPER FUNCTION) Strategy to generate a single `Card`.
-    """
+    '''
     suit_choices = suits if suits is not None else list(Suit)
     return st.builds(
         Card,
@@ -107,10 +107,20 @@ def test_draw(old_hand: Hand, num_to_draw: int):
     assert is_valid_draw(old_hand, num_to_draw, new_hand)
 
 def player_strat():
-    raise NotImplementedError
+    return st.lists(
+        card_strat([Suit.CLUBS, Suit.DIAMONDS]),
+        min_size=HAND_SIZE,
+        max_size=HAND_SIZE,
+        unique=True
+    )
 
 def opponent_strat():
-    raise NotImplementedError
+    return st.lists(
+        card_strat([Suit.HEARTS, Suit.SPADES]),
+        min_size=HAND_SIZE,
+        max_size=HAND_SIZE,
+        unique=True
+    )
 
 @given(player=player_strat(), opponent=opponent_strat())
 def test_play_hand(player: Hand, opponent: Hand):
