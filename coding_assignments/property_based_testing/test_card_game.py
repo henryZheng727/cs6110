@@ -1,5 +1,5 @@
 from hypothesis import given, settings, strategies as st
-from card_game_utils import MAX_PLAYERS, Hand, HAND_SIZE, GameResult, Card, Rank, Suit
+from card_game_utils import MAX_PLAYERS, Hand, HAND_SIZE, GameResult, Card, Rank, Suit, rank_counts
 from correct_card_game import deal, draw, play_hand
 
 MAX_EXAMPLES = 1_000 # lower number => faster, but less coverage
@@ -49,7 +49,43 @@ def is_valid_play_hand(player: Hand, opponent: Hand, result: GameResult) -> bool
     Check that result is a valid outcome of `play_hand(player, opponent)`
     from the perspective of the player.
     '''
-    raise NotImplementedError
+    if not is_valid_hand(player) or not is_valid_hand(opponent):
+        return False
+    if any(card in opponent for card in player):
+        return False
+    
+    pc = rank_counts(player)
+    oc = rank_counts(opponent)
+
+    p_max = max(pc.values())
+    o_max = max(oc.values())
+
+    if p_max > o_max:
+        expected = GameResult.WIN
+    elif p_max < o_max:
+        expected = GameResult.LOSS
+    else:
+        p_low = min(rank.value for (rank, count) in pc.items() if count == p_max)
+        o_low = min(rank.value for (rank, count) in oc.items() if count == o_max)
+        if p_low == o_low:
+            expected = GameResult.TIE
+        elif p_low > o_low:
+            expected = GameResult.LOSS
+        else:
+            expected = GameResult.WIN
+    
+    return result == expected
+
+def card_strat(suits: list[Suit] | None = None):
+    """
+    (HELPER FUNCTION) Strategy to generate a single `Card`.
+    """
+    suit_choices = suits if suits is not None else list(Suit)
+    return st.builds(
+        Card,
+        rank=st.sampled_from(list(Rank)),
+        suit=st.sampled_from(suit_choices)
+    )
 
 def num_players_strat():
     return st.integers(min_value=1, max_value=MAX_PLAYERS)
@@ -60,7 +96,7 @@ def test_deal(num_players: int):
     assert is_valid_deal(num_players, dealt_hands)
 
 def old_hand_strat():
-    raise NotImplementedError
+    return st.lists(card_strat(), min_size=HAND_SIZE, max_size=HAND_SIZE, unique=True)
 
 def num_to_draw_strat():
     return st.integers(min_value=0, max_value=HAND_SIZE)
