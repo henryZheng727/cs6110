@@ -21,7 +21,22 @@ theorem two:
 
 theorem three:
     (P → Q) ∨ P ∧ ¬Q := by
-      sorry
+  classical
+  by_cases hQ : Q
+  case pos =>
+    left
+    intro p
+    exact hQ
+  case neg =>
+    by_cases hP : P
+    case pos =>
+      right
+      exact And.intro hP hQ
+    case neg =>
+      left
+      intro p
+      exfalso
+      exact hP p
 
 theorem four:
     ((P → Q) ∧ (P → R)) → (P → Q ∧ R) := by
