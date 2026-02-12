@@ -15,27 +15,39 @@ sig Process {
    highestSeenID: pfunc State -> Int
 }
 
+fun max2 [a, b: Int] : Int {
+    { a >= b => a else b }
+}
+
 pred wellformed {
    -- every process can reach every process via successor
    -- Assumption: (successor is linear)
    all p1, p2: Process | reachable[p2,p1,successor]
 
    -- Every process has a nonzero ID
-   -- TODO: FILL IN HERE
+   all p: Process | p.ID > 0
 
    -- Every process has a different ID
-   -- TODO: FILL IN HERE
+   all p1, p2: Process | p1 != p2 implies p1.ID != p2.ID
 }
 
 -- In the initial state, each process sends its own ID
 pred init [t: State] {
-    -- TODO: FILL IN HERE
+    all p: Process | p.highestSeenID[t] = p.ID
 }
 
 -- A process has won when all processes have its ID. But how does it learn this?
 -- A process "knows" it has won when it *receives* its own ID.
 pred winningAfter [t: State, p: Process] {
-    -- TODO: FILL IN HERE
+    -- global 
+    all q: Process | q.highestSeenID[t] = p.ID
+    
+    -- p receives itself
+    some tPrev: State, pre: Process |
+        Election.next[tPrev] = t and
+        pre.successor = p and
+        pre.highestSeenID[tPrev] = p.ID
+    // p.highestSeenID[t] = p.ID
 }
 
 -- Validity check for a transition step taken from state <t1> to state <t2>
@@ -44,8 +56,9 @@ pred winningAfter [t: State, p: Process] {
 -- * Syntax hints:
 --   + if-then-else is written as: { e1 => e2 else e3 }
 --   + variable declarations are: { let NAME = e1 | e2 }
-pred step[t1, t2: State] {
-    -- TODO: FILL IN HERE
+pred step [t1, t2: State] {
+    all p: Process |
+        p.successor.highestSeenID[t2] = max2[p.highestSeenID[t1], p.successor.highestSeenID[t1]]
 }
 
 -- Read these constraints to get a sense of how to fill in blanks above.
@@ -73,14 +86,16 @@ pred winningIsForever {
     traces implies {
         -- When a process wins it stays the winner
         -- What does it mean to stay the winner? Think about every process's highestSeenID
-        -- TODO: FILL IN HERE
+        all t: State, p: Process, t2: State, q: Process |
+            (winningAfter[t, p] and reachable[t2,t,Election.next])
+                implies q.highestSeenID[t2] = p.ID
     }
 }
 
 pred eventuallyElectionEnds {
     traces implies {
 	    -- Given <traces>, some process will always eventually win.
-        -- TODO: FILL IN HERE
+        some t: State, p: Process | winningAfter[t, p]
     }
 }
 
